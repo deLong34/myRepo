@@ -1,0 +1,45 @@
+use base      @ИСПОЛЬЗОВАТЬ БД с названием base
+CREATE TABLE  @создать таблицу
+      
+INSERT INTO table (id, name) VALUES (n, name5);
+SELECT * FROM table  @ВЫБИРАЕТ таблицы table полностью 
+SELECT name1, name2  @выводит столбцы таблицы
+              WHERE param условие  @ВЫБРАТЬ из таблицы table ГДЕ параметр param соответствует условию
+              WHERE (условие 1) OR/AND (условие 2);
+              WHERE NOT (условие);
+                   LIKE 'Б%'  выводит только значения, начинающиеся на букву Б
+    = равно, <> не равно, >, <, >=, <=, IS NULL, IS NOT NULL, 
+   DISTINCT  @выводит только уникальные значения
+   ORDER BY  @сортировать по     (ASC - в прямом) 
+   ORDER BY ... DESC @сортировка в обратном порядке
+   LIMIT     @выводит указанное количество строк
+SELECT table.param, param2 FROM table
+ INNER JOIN table2 ON table2.param3 = n   @выводит сводную таблицу со столбцами 1, 2, при условии что param3 (условие) 
+ LEFT JOIN        @слияние всей таблицы слева с выборкой справа
+ RIGHT JOIN       @слияние всех столбцов справа с выборкой слева
+ FULL OUTER JION  @слияние таблиц. НЕ РАБОТАЕТ В MySQL
+UNION        @Объединяет (склеивает) таблицы. Аналог FULL OUTER JION
+APDATE table SET name = '...' WHERE id=   @меняет в таблице table параметр name в строке id
+DELETE FROM ... WHERE ...  @удалить из таблици, при условии
+AND          @и
+OR           @или
+
+
+use shop;
+select * from prod_type
+   LEFT JOIN product ON prod_type.id = product.prod_type_id
+   where category_id IS NULL;
+\\\Выводит все типы, для которых нет ни одного товара
+
+select product.id, brand.name, prod_type.type, category.name, product.price from product
+   LEFT JOIN order_product ON product.id = order_product.product_id
+   INNER JOIN category ON product.category_id = category.id
+   INNER JOIN brand ON product.brand_id = brand.id
+   INNER JOIN prod_type ON product.prod_type_id = prod_type.id
+  where order_id IS NULL;
+\\\Выводит инфо обо всех товарах, не попавших ни в один из заказов
+SELECT shop.order.user_name, sum(price * order_product.count) as Total_price FROM order_product
+INNER JOIN product ON product.id = order_product.product_id
+RIGHT JOIN shop.order ON order_product.order_id = shop.order.id
+WHERE order_id = 2;
+\\\Выводи сумму заказов  2 покупателя
